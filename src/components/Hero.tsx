@@ -9,8 +9,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 // Tunable motion constants
 const MOTION = {
   scrollLength: 3.2, // scroll track length in viewport heights
-  scrub: 1,
-  carStart: -0.3, // car start x as fraction of car width (partially off-stage)
+  scrub: 0.5,
+  carStart: 0.02, // car start x as fraction of car width (fully visible)
   carEndMargin: 0.04, // final gap from right edge, fraction of stage width
   carLift: -6, // px vertical drift
   carScale: 1.05,
@@ -89,15 +89,20 @@ export function Hero() {
             )
             .to(q(".js-grid"), { xPercent: mobile ? -4 : -12, duration: 1 }, 0)
             .to(q(".js-glow"), { xPercent: mobile ? 8 : 25, duration: 1 }, 0)
-            .fromTo(car, { filter: "brightness(0.45)" }, { filter: "brightness(1)", duration: 0.35 }, 0);
+            .fromTo(car, { opacity: 0.6 }, { opacity: 1, duration: 0.35 }, 0);
 
           // Letters light up when the car's nose passes them
           const stageRect = stage.getBoundingClientRect();
-          const span = carX(1) - startX();
-          q(".js-letter").forEach((el: HTMLElement) => {
+          // Measured once per refresh; mapped to car travel progress (0.05 → 0.85)
+          const letters = q(".js-letter") as HTMLElement[];
+          const first = letters[0].getBoundingClientRect();
+          const last = letters[letters.length - 1].getBoundingClientRect();
+          const hStart = first.left - stageRect.left;
+          const hWidth = Math.max(1, last.right - first.left);
+          letters.forEach((el: HTMLElement) => {
             const r = el.getBoundingClientRect();
             const center = r.left - stageRect.left + r.width / 2;
-            const t = gsap.utils.clamp(0.02, 0.92, (center - car.offsetWidth - startX()) / span);
+            const t = 0.05 + ((center - hStart) / hWidth) * 0.8;
             tl.to(el, { color: "var(--foreground)", duration: 0.04 }, t);
           });
 
@@ -107,7 +112,7 @@ export function Hero() {
             const target = Number(num.dataset["value"]);
             const counter = { v: 0 };
             const at = MOTION.statTimes[i];
-            tl.fromTo(el, { opacity: 0.15, y: 18 }, { opacity: 1, y: 0, duration: 0.08 }, at).fromTo(
+            tl.fromTo(el, { opacity: 0.4, y: 18 }, { opacity: 1, y: 0, duration: 0.08 }, at).fromTo(
               counter,
               { v: 0 },
               {
@@ -193,7 +198,7 @@ export function Hero() {
                 </span>
                 <span className="text-lime">%</span>
               </p>
-              <p className="hidden text-xs text-muted-foreground md:block">{s.note}</p>
+              <p className="hidden text-xs text-foreground/70 md:block">{s.note}</p>
             </li>
           ))}
         </ol>
@@ -208,7 +213,7 @@ export function Hero() {
         />
 
         {/* Car */}
-        <div className="js-car absolute bottom-[calc(16vh-2%)] left-0 z-10 w-[78vw] max-w-[860px] md:w-[46vw]">
+        <div className="js-car will-change-transform absolute bottom-[calc(16vh-2%)] left-0 z-10 w-[78vw] max-w-[860px] md:w-[46vw]">
                     {carFailed ? (
             <div className="flex aspect-[5/2] items-center justify-center border border-dashed border-border-strong font-mono text-xs text-muted-foreground">
               CAR IMAGE MISSING — add public/assets/car.png

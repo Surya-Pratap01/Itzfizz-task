@@ -84,7 +84,7 @@
   --accent: oklch(0.93 0.21 125);
   --accent-foreground: oklch(0.13 0.004 160);
   --accent-lime: oklch(0.93 0.21 125);
-  --headline-dim: oklch(0.32 0.006 150);
+  --headline-dim: oklch(0.2 0.005 150);
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.965 0.005 120);
   --border: oklch(1 0 0 / 8%);
