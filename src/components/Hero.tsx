@@ -95,8 +95,8 @@ export function Hero() {
           const stageRect = stage.getBoundingClientRect();
           // Measured once per refresh; mapped to car travel progress (0.05 → 0.85)
           const letters = q(".js-letter") as HTMLElement[];
-          const first = letters[0].getBoundingClientRect();
-          const last = letters[letters.length - 1].getBoundingClientRect();
+          const first = letters[0]!.getBoundingClientRect();
+          const last = letters[letters.length - 1]!.getBoundingClientRect();
           const hStart = first.left - stageRect.left;
           const hWidth = Math.max(1, last.right - first.left);
           letters.forEach((el: HTMLElement) => {
