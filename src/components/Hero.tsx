@@ -53,7 +53,7 @@ export function Hero() {
             .from(q(".js-fade"), { y: 16, opacity: 0, duration: 0.7, stagger: 0.08 }, 0.25)
             .from(q(".js-stat-frame"), { scaleX: 0, transformOrigin: "left", duration: 0.6, stagger: 0.08 }, 0.4)
             .from(q(".js-glow"), { opacity: 0, duration: 1.2 }, 0.2)
-            .from(q(".js-car-img"), { opacity: 0, x: -40, filter: "brightness(0.2)", duration: 1.1 }, 0.35);
+            .from(q(".js-car-img"), { opacity: 0, x: -40, duration: 1.1 }, 0.35);
 
           // ---- Scroll timeline (single coordinated sequence) ----
           const stage = q(".js-stage")[0] as HTMLElement;
@@ -89,7 +89,7 @@ export function Hero() {
             )
             .to(q(".js-grid"), { xPercent: mobile ? -4 : -12, duration: 1 }, 0)
             .to(q(".js-glow"), { xPercent: mobile ? 8 : 25, duration: 1 }, 0)
-            .to(q(".js-shadow"), { opacity: 0, duration: 0.4 }, 0);
+            .fromTo(car, { filter: "brightness(0.45)" }, { filter: "brightness(1)", duration: 0.35 }, 0);
 
           // Letters light up when the car's nose passes them
           const stageRect = stage.getBoundingClientRect();
@@ -209,8 +209,7 @@ export function Hero() {
 
         {/* Car */}
         <div className="js-car absolute bottom-[calc(16vh-2%)] left-0 z-10 w-[78vw] max-w-[860px] md:w-[46vw]">
-          <div aria-hidden className="js-shadow absolute inset-0 bg-car-shadow" />
-          {carFailed ? (
+                    {carFailed ? (
             <div className="flex aspect-[5/2] items-center justify-center border border-dashed border-border-strong font-mono text-xs text-muted-foreground">
               CAR IMAGE MISSING — add public/assets/car.png
             </div>
