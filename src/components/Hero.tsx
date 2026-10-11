@@ -104,7 +104,7 @@ export function Hero() {
           // Performance signals at deliberate points
           q(".js-stat").forEach((el: HTMLElement, i: number) => {
             const num = el.querySelector(".js-num") as HTMLElement;
-            const target = Number(num.dataset.value);
+            const target = Number(num.dataset["value"]);
             const counter = { v: 0 };
             const at = MOTION.statTimes[i];
             tl.fromTo(el, { opacity: 0.15, y: 18 }, { opacity: 1, y: 0, duration: 0.08 }, at).fromTo(
